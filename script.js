@@ -56,11 +56,27 @@ function cargarCarrito() {
       div.classList.add('producto-carrito')
       div.innerHTML = `
         <span>${producto.nombre} - Cantidad: ${item.cantidad}</span>
+        <button onclick="agregarAlCarrito(${item.id})">+</button>
+        ${item.cantidad > 1 ? `<button onclick="reducirCantidad(${item.id})">-</button>` : ''}
         <button onclick="eliminarDelCarrito(${item.id})">Eliminar</button>
       `
       contenedor.appendChild(div)
     }
   })
+}
+
+function reducirCantidad(idProducto) {
+  let carrito = JSON.parse(localStorage.getItem('carrito')) || []
+  const productoIndex = carrito.findIndex(p => p.id === idProducto)
+
+  if (productoIndex !== -1) {
+    if (carrito[productoIndex].cantidad > 1) {
+        carrito[productoIndex].cantidad--
+    }
+  }
+
+  localStorage.setItem('carrito', JSON.stringify(carrito))
+  cargarCarrito()
 }
 
 function eliminarDelCarrito(idProducto) {
